@@ -1,3 +1,4 @@
+require('dotenv').config();
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
@@ -40,13 +41,15 @@ describe('Statistic API', () => {
 
     before(async () => {
 
-        await User.deleteMany();
-        await Statistics.deleteMany();
-
         raw_data['country'] = 'Nicaragua';
         
         await saveItemStatistic(raw_data);
 
+    });
+
+    beforeEach(async () => {
+        await User.deleteMany();
+        await Statistics.deleteMany();
     });
 
     it('should Register user, login user, check token and get all statictis', (done) => {
@@ -94,6 +97,42 @@ describe('Statistic API', () => {
 
                 response_statistic_new.should.have.status(200);
                 
+                done();
+                
+            });
+
+        });
+               
+    }).timeout(15000);
+
+    it('should get statistics from api and save data in database', (done) => {
+        
+        chai.request(server)
+        .post('/auth/signup')
+        .send({
+            'email':'robertouraccan@gmail.com',
+            'password':'Abc123..'
+        })
+        .end((err, res) => {
+
+            res.should.have.status(200);
+
+            chai.request(server)
+            .post('/auth/login')
+            .send({
+                'email':'robertouraccan@gmail.com',
+                'password':'Abc123..'
+            }).end(async (err, res) => {
+
+                res.body.should.have.property('token');
+                let token = res.body.token;
+                                
+                var response_statistic_request_from_api = await chai.request(server)
+                .get('/sync')
+                .set('x-token', token);
+                                
+                response_statistic_request_from_api.should.have.status(200);
+
                 done();
                 
             });

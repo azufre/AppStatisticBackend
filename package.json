@@ -21,5 +21,8 @@
     "mocha": "^9.0.2",
     "mockgoose": "^8.0.4",
     "mongoose": "^5.13.2"
+  },
+  "engines": {
+    "node": "10.16.1"
   }
 }

@@ -17,6 +17,7 @@ app.use(express.json());
 //starting db
 dbConnection();
 
+app.use('/', require('./routes/home.routes'));
 app.use('/auth', require('./routes/auth.routes'));
 app.use('/statistic', require('./routes/statistic.routes'));
 app.use('/sync', require('./routes/sync.routes'));

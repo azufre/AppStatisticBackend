@@ -5,6 +5,9 @@ const express = require('express');
 const cors = require('cors');
 const { dbConnection } = require('./database/config');
 
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 //setting up server express
 const app = express();
 
@@ -17,7 +20,22 @@ app.use(express.json());
 //starting db
 dbConnection();
 
-app.use('/', require('./routes/home.routes'));
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API Statistic',
+      version: '1.0.0',
+      description:'API Statistic information'
+    },
+  },
+  apis: ['./routes/*.js'],
+};
+
+const specs = swaggerJSDoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 app.use('/auth', require('./routes/auth.routes'));
 app.use('/statistic', require('./routes/statistic.routes'));
 app.use('/sync', require('./routes/sync.routes'));

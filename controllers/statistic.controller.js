@@ -52,11 +52,10 @@ const saveStatistic = async (req, resp = response) => {
 
     try {
 
-        const result = await saveItemStatistic(req.body);
+        const Item = await saveItemStatistic(req.body);
 
         return resp.json({
-            ok: true,
-            result
+            Item
         });
 
     } catch (error) {

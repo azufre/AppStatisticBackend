@@ -34,11 +34,11 @@ const options = {
 
 const specs = swaggerJSDoc(options);
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(specs));
-
 app.use('/auth', require('./routes/auth.routes'));
 app.use('/statistic', require('./routes/statistic.routes'));
 app.use('/sync', require('./routes/sync.routes'));
+
+app.use('/', swaggerUi.serve, swaggerUi.setup(specs));
 
 var server = app.listen(process.env.PORT, () => {
   console.log(`Example app listening at http://localhost:${process.env.PORT}`)
